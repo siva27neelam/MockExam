@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Import Questions</title>
+</head>
+<body>
+<h1>Import Questions</h1>
+
+<form th:action="@{/import}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".xlsx, .xls">
+    <button type="submit">Import</button>
+</form>
+
+<div th:if="${message}">
+    <p th:text="${message}" style="color: green;"></p>
+</div>
+
+<div th:if="${error}">
+    <p th:text="${error}" style="color: red;"></p>
+</div>
+</body>
+</html>

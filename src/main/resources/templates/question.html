@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Multiple Choice Exam</title>
+</head>
+<body>
+<h1>Multiple Choice Exam</h1>
+<h2>Question <span th:text="${currentIndex}"></span></h2>
+<div>
+    <form th:action="@{/questions}" method="post">
+        <p th:text="${question.questionText}"></p>
+        <ul>
+            <li th:each="option : ${question.options}">
+                <input type="radio" name="selectedOption" th:value="${option}">
+                <span th:text="${option}"></span>
+            </li>
+        </ul>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>
