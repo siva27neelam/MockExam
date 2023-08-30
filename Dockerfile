@@ -1,18 +1,15 @@
-FROM openjdk:17 as build
-VOLUME /tmp
-WORKDIR /code
+#
+# Build stage
+#
+FROM maven:3.6.0-jdk-11-slim AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
-RUN apt-get update
-RUN apt-get install -y maven
-
-ADD pom.xml /code/pom.xml
-RUN ["mvn", "dependency:resolve"]
-RUN ["mvn", "verify"]
-
-# Adding source, compile and package into a fat jar
-ADD src /code/src
-RUN ["mvn", "package"]
-
-ADD target/*.jar app.jar
-RUN bash -c 'touch /app.jar'
-ENTRYPOINT ["java","-jar","/app.jar"]
+#
+# Package stage
+#
+FROM openjdk:17-jre-slim
+COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
